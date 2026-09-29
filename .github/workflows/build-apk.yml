@@ -25,7 +25,11 @@ jobs:
           java-version: 21
 
       - name: Instalar dependências
-        run: npm install
+        run: npm install- name: Preparar arquivos web
+  run: |
+    mkdir -p www/icons
+    cp index.html manifest.json sw.js www/
+    cp icon-192.png icon-512.png www/icons/
 
       - name: Criar projeto Android
         run: npx cap add android
