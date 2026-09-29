@@ -1,0 +1,6 @@
+{
+  "appId": "com.faceup.app",
+  "appName": "FaceUp 2.0",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
