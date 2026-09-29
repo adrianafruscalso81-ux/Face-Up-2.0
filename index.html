@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-BR" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>FaceUp 2.0 - Glow Up Facial & Personal Care</title>
+<meta name="theme-color" content="#0b0f19">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FaceUp 2.0">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{colors:{brand:'#8b5cf6'}}}};</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<style>
+*{box-sizing:border-box}body{font-family:'Inter',sans-serif;background:#080b12;color:#f8fafc;padding-bottom:90px}
+.glass{background:rgba(17,24,39,.72);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.08)}
+.gradient-text{background:linear-gradient(90deg,#a78bfa,#f0abfc);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav-active{color:#a78bfa;font-weight:700}.page{display:none}.page.active{display:block}
+.progress-ring{transform:rotate(-90deg)}.progress-ring circle{fill:none;stroke-linecap:round}
+input,textarea,select{outline:none}::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#374151;border-radius:10px}
+.check:checked+span{text-decoration:line-through;opacity:.55}
+</style>
+</head>
+<body>
+<div class="max-w-md mx-auto min-h-screen relative px-4 pt-6">
+<header class="pb-4 flex items-center justify-between border-b border-white/5 mb-4">
+<div><div class="flex items-center gap-2"><i data-lucide="sparkles" class="w-6 h-6 text-violet-400"></i><h1 class="text-2xl font-extrabold">Face<span class="gradient-text">Up</span> <small class="text-xs text-gray-400">2.0</small></h1></div><p class="text-xs text-gray-400 mt-0.5">Cuidados diários & Exercícios faciais</p></div>
+<div class="glass rounded-full px-3 py-1.5 flex items-center gap-1.5 text-sm border border-violet-500/20"><span>🔥</span><b id="streakCount">1</b> <span class="text-xs text-gray-400">dias</span></div>
+</header>
+
+<main class="mb-20">
+<section id="home" class="page active">
+<div class="glass rounded-3xl p-5 mb-4 border border-violet-500/10"><div class="flex items-center justify-between"><div><p class="text-gray-400 text-xs font-medium uppercase tracking-wider">Progresso de Hoje</p><h2 id="currentDate" class="font-bold text-lg capitalize mt-0.5"></h2></div><div class="relative w-20 h-20"><svg class="progress-ring w-20 h-20"><circle cx="40" cy="40" r="34" stroke="#1f2937" stroke-width="7"/><circle id="progressCircle" cx="40" cy="40" r="34" stroke="#8b5cf6" stroke-width="7" stroke-dasharray="213.6" stroke-dashoffset="213.6"/></svg><div class="absolute inset-0 flex items-center justify-center"><b id="progressPercent" class="text-base">0%</b></div></div></div><p class="text-xs text-gray-300 mt-3"><span id="progressText">0</span> tarefas e exercícios concluídos.</p></div>
+<div class="glass rounded-2xl p-4 mb-4 flex gap-3 items-center"><span class="text-2xl">💡</span><div><b class="text-sm">Dica do Dia</b><p class="text-xs text-gray-400 mt-0.5">Defina o seu formato de rosto na aba Treinos para receber recomendações focadas na sua estrutura muscular.</p></div></div>
+<div class="grid grid-cols-2 gap-3">
+<button onclick="navigateTo('workout')" class="glass rounded-2xl p-4 text-left"><i data-lucide="dumbbell" class="text-amber-400 w-5 h-5"></i><b class="block mt-2 text-sm">Treino Facial</b><span class="text-[11px] text-gray-400">Personalizado ao rosto</span></button>
+<button onclick="navigateTo('routine')" class="glass rounded-2xl p-4 text-left"><i data-lucide="check-circle-2" class="text-violet-400 w-5 h-5"></i><b class="block mt-2 text-sm">Rotina</b><span class="text-[11px] text-gray-400">Tarefas diárias</span></button>
+<button onclick="navigateTo('care')" class="glass rounded-2xl p-4 text-left"><i data-lucide="droplets" class="text-pink-400 w-5 h-5"></i><b class="block mt-2 text-sm">Skincare</b><span class="text-[11px] text-gray-400">Manhã e noite</span></button>
+<button onclick="navigateTo('gallery')" class="glass rounded-2xl p-4 text-left"><i data-lucide="images" class="text-cyan-400 w-5 h-5"></i><b class="block mt-2 text-sm">Evolução</b><span class="text-[11px] text-gray-400">Galeria de fotos</span></button>
+</div>
+<div class="glass rounded-2xl p-4 mt-4"><div class="flex justify-between items-center"><b class="text-sm">💧 Hidratação Diária</b><span id="waterText" class="text-xs text-gray-400">0 / 2000 ml</span></div><div class="h-2.5 bg-gray-800 rounded-full mt-3 overflow-hidden"><div id="waterBar" class="h-full bg-cyan-500 rounded-full transition-all duration-300" style="width:0%"></div></div><div class="flex gap-2 mt-3"><button onclick="addWater(250)" class="flex-1 bg-gray-800 rounded-xl py-2 text-xs font-semibold">+250 ml</button><button onclick="addWater(500)" class="flex-1 bg-gray-800 rounded-xl py-2 text-xs font-semibold">+500 ml</button><button onclick="resetWater()" class="px-3 bg-gray-800 rounded-xl text-xs">↺</button></div></div>
+</section>
+
+<section id="workout" class="page"><div class="mb-4"><h2 class="text-xl font-bold">Treino Facial Personalizado</h2><p class="text-xs text-gray-400">Selecione a estrutura do seu rosto para focar nos músculos corretos.</p></div>
+<div class="glass rounded-2xl p-4 mb-4 border border-violet-500/20"><label class="block text-xs font-bold text-violet-300 uppercase tracking-wider mb-2">Selecione o formato do seu rosto:</label><select id="faceShapeSelect" onchange="changeFaceShape(this.value)" class="w-full bg-gray-900 text-white text-sm rounded-xl p-3 border border-white/10"><option value="round">Redondo</option><option value="square">Quadrado</option><option value="oval">Oval / Elíptico</option><option value="heart">Coração / Invertido</option></select></div>
+<div class="space-y-3" id="workoutList"></div></section>
+
+<section id="routine" class="page"><div class="flex items-center justify-between mb-4"><div><h2 class="text-xl font-bold">Minha Rotina</h2><p class="text-xs text-gray-400">Hábitos e metas diárias personalizadas</p></div><button onclick="openAddModal()" class="bg-violet-600 rounded-xl p-2.5"><i data-lucide="plus" class="w-5 h-5"></i></button></div>
+<div class="glass rounded-2xl p-4 mb-4 border border-violet-500/20"><div class="flex justify-between items-center"><b class="text-sm flex items-center gap-1.5"><i data-lucide="timer" class="w-4 h-4 text-violet-400"></i> Cronômetro</b><span id="timerDisplay" class="text-xl font-mono font-bold text-violet-300">03:00</span></div><div class="flex gap-2 mt-3"><button onclick="setTimerPreset(60)" class="flex-1 bg-gray-800 rounded-xl py-2 text-xs">1 min</button><button onclick="setTimerPreset(180)" class="flex-1 bg-gray-800 rounded-xl py-2 text-xs">3 min</button><button onclick="setTimerPreset(300)" class="flex-1 bg-gray-800 rounded-xl py-2 text-xs">5 min</button></div><button id="timerBtn" onclick="toggleTimer()" class="w-full mt-3 bg-violet-600 rounded-xl py-2.5 text-sm font-semibold">Iniciar</button></div>
+<div id="routineList" class="space-y-3"></div></section>
+
+<section id="care" class="page"><h2 class="text-xl font-bold mb-1">Cuidados Pessoais</h2><p class="text-xs text-gray-400 mb-4">Mantenha a saúde da pele em dia</p>
+<div class="glass rounded-2xl p-4 mb-4"><h3 class="font-bold text-sm text-amber-400 flex items-center gap-2 mb-3">☀️ Rotina Diurna</h3><div class="space-y-3 text-sm"><label class="flex items-center gap-3"><input class="check accent-violet-500 w-4 h-4" type="checkbox" data-care="morning_face" onchange="toggleSkincare(this)"><span>Limpeza facial suave</span></label><label class="flex items-center gap-3"><input class="check accent-violet-500 w-4 h-4" type="checkbox" data-care="morning_moist" onchange="toggleSkincare(this)"><span>Hidratante facial apropriado</span></label><label class="flex items-center gap-3"><input class="check accent-violet-500 w-4 h-4" type="checkbox" data-care="morning_sunscreen" onchange="toggleSkincare(this)"><span>Protetor solar (FPS 30+)</span></label></div></div>
+<div class="glass rounded-2xl p-4"><h3 class="font-bold text-sm text-indigo-400 flex items-center gap-2 mb-3">🌙 Rotina Noturna</h3><div class="space-y-3 text-sm"><label class="flex items-center gap-3"><input class="check accent-violet-500 w-4 h-4" type="checkbox" data-care="night_face" onchange="toggleSkincare(this)"><span>Higienização facial</span></label><label class="flex items-center gap-3"><input class="check accent-violet-500 w-4 h-4" type="checkbox" data-care="night_moist" onchange="toggleSkincare(this)"><span>Hidratação ou creme noturno</span></label><label class="flex items-center gap-3"><input class="check accent-violet-500 w-4 h-4" type="checkbox" data-care="night_sleep" onchange="toggleSkincare(this)"><span>Boas horas de sono</span></label></div></div></section>
+
+<section id="gallery" class="page"><div class="flex items-center justify-between mb-2"><h2 class="text-xl font-bold">Galeria</h2><label class="bg-violet-600 rounded-xl px-3 py-2 text-xs font-semibold cursor-pointer">+ Foto<input id="photoInput" type="file" accept="image/*" class="hidden" onchange="uploadImage(event)"></label></div><p class="text-xs text-gray-400 mb-4">Acompanhe sua evolução de hábitos e postura.</p><div id="galleryGrid" class="grid grid-cols-2 gap-3"></div></section>
+</main>
+
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md glass border-t border-white/10 px-2 py-2 z-40"><div class="grid grid-cols-5 text-center">
+<button onclick="navigateTo('home')" data-nav="home" class="py-1.5 nav-active flex flex-col items-center"><i data-lucide="home" class="w-5 h-5"></i><span class="text-[10px] mt-1">Início</span></button>
+<button onclick="navigateTo('workout')" data-nav="workout" class="py-1.5 flex flex-col items-center"><i data-lucide="activity" class="w-5 h-5"></i><span class="text-[10px] mt-1">Treino</span></button>
+<button onclick="navigateTo('routine')" data-nav="routine" class="py-1.5 flex flex-col items-center"><i data-lucide="list-checks" class="w-5 h-5"></i><span class="text-[10px] mt-1">Rotina</span></button>
+<button onclick="navigateTo('care')" data-nav="care" class="py-1.5 flex flex-col items-center"><i data-lucide="droplets" class="w-5 h-5"></i><span class="text-[10px] mt-1">Cuidados</span></button>
+<button onclick="navigateTo('gallery')" data-nav="gallery" class="py-1.5 flex flex-col items-center"><i data-lucide="images" class="w-5 h-5"></i><span class="text-[10px] mt-1">Galeria</span></button>
+</div></nav>
+
+<div id="modal" class="hidden fixed inset-0 bg-black/80 z-50 p-5 items-end justify-center"><div class="glass rounded-3xl p-5 w-full max-w-md mb-2"><h3 class="text-lg font-bold mb-3">Nova Tarefa</h3><input id="routineTitle" class="w-full bg-gray-900 rounded-xl p-3 mb-3 text-sm text-white" placeholder="Nome do hábito"><textarea id="routineDesc" class="w-full bg-gray-900 rounded-xl p-3 mb-4 text-sm text-white" placeholder="Instruções ou detalhes"></textarea><div class="flex gap-2"><button onclick="closeAddModal()" class="flex-1 bg-gray-800 rounded-xl py-2.5 text-sm">Cancelar</button><button onclick="addRoutineItem()" class="flex-1 bg-violet-600 rounded-xl py-2.5 text-sm">Salvar</button></div></div></div>
+</div>
+
+<script>
+let state={water:0,waterGoal:2000,streak:1,faceShape:'round',routines:[{id:'1',title:'Postura da Mandíbula',desc:'Manter os dentes levemente afastados e os lábios selados durante o dia.',done:false},{id:'2',title:'Exercícios Faciais Diários',desc:'Completar o treino personalizado de rosto.',done:false}],skincare:{},workouts:{},photos:[]};
+const workoutsByShape={
+round:[{id:'r1',cat:'Maçãs do Rosto',title:'Sorriso de Peixe',desc:'Sugue levemente as bochechas para dentro e tente sorrir.',series:'3 séries de 10s'},{id:'r2',cat:'Mandíbula',title:'Projeção de Mandíbula',desc:'Mantenha o pescoço confortável e faça movimentos suaves.',series:'3 séries de 12 reps'},{id:'r3',cat:'Bochechas',title:'Elevação das Maçãs',desc:'Sorria amplamente levantando suavemente as maçãs do rosto.',series:'15 repetições'}],
+square:[{id:'s1',cat:'Masseter',title:'Relaxamento do Maxilar',desc:'Massageie suavemente as laterais do maxilar e relaxe a mandíbula.',series:'1 minuto'},{id:'s2',cat:'Pescoço',title:'Alongamento do Pescoço',desc:'Olhe suavemente para cima e mantenha uma posição confortável.',series:'3 séries de 10s'},{id:'s3',cat:'Têmporas',title:'Massagem Temporal',desc:'Faça movimentos circulares suaves nas têmporas.',series:'30 segundos'}],
+oval:[{id:'o1',cat:'Olhos',title:'Relaxamento Periorbital',desc:'Feche os olhos suavemente e relaxe a região ao redor deles.',series:'10 repetições'},{id:'o2',cat:'Língua',title:'Posição de Repouso',desc:'Mantenha a língua confortavelmente apoiada no céu da boca.',series:'3 séries de 15s'},{id:'o3',cat:'Lábios',title:'Sopro de Resistência',desc:'Encha as bochechas de ar e passe o ar de um lado para o outro.',series:'15 alternâncias'}],
+heart:[{id:'h1',cat:'Queixo',title:'Resistência de Queixo',desc:'Faça movimentos leves contra a mão, sem forçar a mandíbula.',series:'3 séries de 8 reps'},{id:'h2',cat:'Bochechas',title:'Sucção de Bochechas',desc:'Faça uma sucção leve das bochechas mantendo os lábios confortáveis.',series:'10 repetições'},{id:'h3',cat:'Pescoço',title:'Elevação Posterior',desc:'Deitado, eleve a cabeça devagar e sem desconforto.',series:'10 repetições'}]};
+let timerInterval=null,timerTime=180;
+document.addEventListener('DOMContentLoaded',()=>{loadState();updateDate();renderRoutines();renderGallery();renderWorkouts();updateUI();lucide.createIcons();document.getElementById('faceShapeSelect').value=state.faceShape;document.querySelectorAll('[data-care]').forEach(x=>x.checked=!!state.skincare[x.dataset.care]);});
+function saveState(){localStorage.setItem('faceup_2_state',JSON.stringify(state))}
+function loadState(){try{const s=JSON.parse(localStorage.getItem('faceup_2_state'));if(s)state={...state,...s}}catch(e){}}
+function updateDate(){document.getElementById('currentDate').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).format(new Date())}
+function navigateTo(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('[data-nav]').forEach(n=>n.classList.toggle('nav-active',n.dataset.nav===id));window.scrollTo(0,0);lucide.createIcons()}
+function changeFaceShape(shape){state.faceShape=shape;saveState();renderWorkouts();updateUI()}
+function renderWorkouts(){const list=workoutsByShape[state.faceShape]||[];document.getElementById('workoutList').innerHTML=list.map(w=>`<div class="glass rounded-2xl p-4 border-l-4 border-violet-500"><div class="flex justify-between items-start"><div><span class="text-[10px] font-bold uppercase text-gray-300">${escapeHtml(w.cat)}</span><h3 class="font-bold text-sm mt-0.5">${escapeHtml(w.title)}</h3></div><input type="checkbox" data-workout="${w.id}" ${state.workouts[w.id]?'checked':''} onchange="toggleWorkout(this)" class="w-5 h-5 accent-violet-500"></div><p class="text-xs text-gray-400 mt-2">${escapeHtml(w.desc)}</p><div class="mt-2 text-[11px] font-semibold text-violet-300">Série: ${escapeHtml(w.series)}</div></div>`).join('');lucide.createIcons()}
+function toggleWorkout(box){state.workouts[box.dataset.workout]=box.checked;if(box.checked&&window.confetti)confetti({particleCount:40,spread:50,origin:{y:.8}});saveState();updateUI()}
+function addWater(n){state.water=Math.min(state.water+n,state.waterGoal);saveState();updateUI()}
+function resetWater(){state.water=0;saveState();updateUI()}
+function renderRoutines(){document.getElementById('routineList').innerHTML=state.routines.map(r=>`<div class="glass rounded-2xl p-4 flex gap-3 items-start border border-white/5"><input class="mt-1 w-5 h-5 accent-violet-500" type="checkbox" ${r.done?'checked':''} onchange="toggleRoutine('${r.id}')"><div class="flex-1"><b class="text-sm ${r.done?'line-through opacity-50':''}">${escapeHtml(r.title)}</b><p class="text-xs text-gray-400 mt-0.5">${escapeHtml(r.desc||'')}</p></div><button onclick="deleteRoutine('${r.id}')" class="text-gray-500 hover:text-red-400">🗑️</button></div>`).join('');lucide.createIcons()}
+function toggleRoutine(id){const r=state.routines.find(x=>x.id===id);if(!r)return;r.done=!r.done;if(r.done&&window.confetti)confetti({particleCount:50,spread:50,origin:{y:.75}});saveState();renderRoutines();updateUI()}
+function deleteRoutine(id){state.routines=state.routines.filter(x=>x.id!==id);saveState();renderRoutines();updateUI()}
+function openAddModal(){document.getElementById('modal').classList.remove('hidden');document.getElementById('modal').classList.add('flex')}
+function closeAddModal(){document.getElementById('modal').classList.add('hidden');document.getElementById('modal').classList.remove('flex')}
+function addRoutineItem(){const t=document.getElementById('routineTitle').value.trim();if(!t)return;state.routines.push({id:Date.now().toString(),title:t,desc:document.getElementById('routineDesc').value.trim(),done:false});document.getElementById('routineTitle').value='';document.getElementById('routineDesc').value='';saveState();closeAddModal();renderRoutines();updateUI()}
+function toggleSkincare(box){state.skincare[box.dataset.care]=box.checked;if(box.checked&&window.confetti)confetti({particleCount:30,spread:40,origin:{y:.8}});saveState();updateUI()}
+function setTimerPreset(s){timerTime=s;updateTimerDisplay();document.getElementById('timerBtn').textContent='Iniciar';if(timerInterval){clearInterval(timerInterval);timerInterval=null}}
+function toggleTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;document.getElementById('timerBtn').textContent='Continuar';return}document.getElementById('timerBtn').textContent='Pausar';timerInterval=setInterval(()=>{timerTime--;updateTimerDisplay();if(timerTime<=0){clearInterval(timerInterval);timerInterval=null;document.getElementById('timerBtn').textContent='Iniciar';if(window.confetti)confetti({particleCount:90,spread:70,origin:{y:.7}})}},1000)}
+function updateTimerDisplay(){document.getElementById('timerDisplay').textContent=String(Math.floor(timerTime/60)).padStart(2,'0')+':'+String(timerTime%60).padStart(2,'0')}
+function uploadImage(e){const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{state.photos.unshift({id:Date.now(),src:rd.result});state.photos=state.photos.slice(0,20);saveState();renderGallery()};rd.readAsDataURL(f);e.target.value=''}
+function renderGallery(){const el=document.getElementById('galleryGrid');if(!state.photos.length){el.innerHTML='<div class="col-span-2 glass rounded-2xl p-6 text-center text-xs text-gray-500">Nenhuma foto de progresso adicionada ainda.</div>';return}el.innerHTML=state.photos.map(p=>`<div class="relative aspect-square rounded-2xl overflow-hidden border border-white/10"><img src="${p.src}" class="w-full h-full object-cover"><button onclick="deletePhoto(${p.id})" class="absolute top-2 right-2 bg-black/60 rounded-full p-1.5 text-white">🗑️</button></div>`).join('')}
+function deletePhoto(id){state.photos=state.photos.filter(p=>p.id!==id);saveState();renderGallery()}
+function updateProgress(){const routineDone=state.routines.filter(r=>r.done).length,careDone=Object.values(state.skincare).filter(Boolean).length,workoutDone=Object.values(state.workouts||{}).filter(Boolean).length,total=state.routines.length+6+3,done=routineDone+careDone+workoutDone,pct=total?Math.min(100,Math.round(done/total*100)):0;document.getElementById('progressPercent').textContent=pct+'%';document.getElementById('progressText').textContent=done;document.getElementById('progressCircle').style.strokeDashoffset=213.6-213.6*pct/100}
+function updateUI(){document.getElementById('streakCount').textContent=state.streak;document.getElementById('waterText').textContent=state.water+' / '+state.waterGoal+' ml';document.getElementById('waterBar').style.width=Math.min(100,state.water/state.waterGoal*100)+'%';updateProgress()}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js"));
+}
+</script>
+
+</body>
+</html>
