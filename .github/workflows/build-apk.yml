@@ -3,7 +3,9 @@ name: Gerar APK do FaceUp 2.0
 on:
   workflow_dispatch:
   push:
-    branches: ["main", "master"]
+    branches:
+      - main
+      - master
 
 jobs:
   build-apk:
@@ -25,11 +27,15 @@ jobs:
           java-version: 21
 
       - name: Instalar dependências
-        run: npm install- name: Preparar arquivos web
-  run: |
-    mkdir -p www/icons
-    cp index.html manifest.json sw.js www/
-    cp icon-192.png icon-512.png www/icons/
+        run: npm install
+
+      - name: Verificar arquivos do aplicativo
+        run: |
+          test -f www/index.html
+          test -f www/manifest.json
+          test -f www/sw.js
+          test -f www/icons/icon-192.png
+          test -f www/icons/icon-512.png
 
       - name: Criar projeto Android
         run: npx cap add android
@@ -37,11 +43,11 @@ jobs:
       - name: Sincronizar aplicativo
         run: npx cap sync android
 
-      - name: Gerar APK de teste
+      - name: Gerar APK
         working-directory: android
         run: ./gradlew assembleDebug
 
-      - name: Disponibilizar APK para download
+      - name: Disponibilizar APK
         uses: actions/upload-artifact@v4
         with:
           name: FaceUp-2.0-APK
